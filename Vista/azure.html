@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+
+    <title>Document</title>
+
+    <!-- JQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var URLactual = window.location;
+            var cadena = URLactual + "";
+            var usr = cadena.substr(cadena.length - 1, 1)
+            var usuario = usr == "1" ? "Ivan Morales" : usr == "2" ? "Raul de OB" : usr == "3" ? "Tania de OB" : "NA";
+            $("#a_UserName").text(usuario)
+            $("#usr").text(usr)
+
+            //Contenido
+            $('th').click(function () {
+                var table = $(this).parents('table').eq(0)
+                var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
+                this.asc = !this.asc
+                if (!this.asc) {
+                    rows = rows.reverse()
+                }
+                for (var i = 0; i < rows.length; i++) {
+                    table.append(rows[i])
+                }
+                setIcon($(this), this.asc);
+            })
+
+            llenarTabla(usr)
+
+            return false;
+        });
+
+        function llenarTabla(usr) {
+
+            var myArray = ["Álvaro Sánchez Monteagudo_Valencia_España_+34657852546_smontegudo@gmail.com_ANGULAR|REACT|HTML&CSS_BB",
+                "Amparo Herra Climent_Sevilla_España_+34123456789_aherrera@gmail.com_FLUTTER|REACT_BB",
+                "Ana Gutierrez Lozano_Madrid_España_+34987541236_agutierrez@gmail.com_REACT|SYMFONY_BB",
+                "Antonio Miguel Lacunza_Barcelona_España_+34758426985_amiguel@gmail.com_ANGULAR|REACT_BB",
+                "Antonio Delgado Jimeno_Oviedo_España_+34542874517_adelgado@gmail.com_ANGULAR|HTML&CSS_BB",
+                "Belén Jerez Rivera_Jaen_España_+34968574215_bjerez@gmail.com_HTML&CSS_BB",
+                "Carla Barroso Soriano_Gijón_España_+34485926157_cbarroso@gmail.com_REACT_BB",
+                "Carlos Yuste Guerrero_Valencia_España_+34487596854_cyuste@gmail.com_ANGULAR_BB",
+                "Carmina Pérez Lopez_Sevilla_España_+34154785426_cperez@gmail.com_FLUTTER_BB",
+                "Iker Casillas_Madrid_España_+34154859263_ikasillas@gmail.com_FLUTTER|REACT_BB"]
+
+            for (var i = 0; i < myArray.length; i++) {
+
+                console.log(myArray[i].split('_')[5])
+                var etiquetas = myArray[i].split('_')[5].split('|')
+                var html_etiquetas = '';
+                for (var j = 0; j < etiquetas.length; j++) {
+                    html_etiquetas = html_etiquetas + "<div style='width: min-content; background: #32d4a4; margin: 0px 5px 0px 0px; color: white; padding: 0px 5px 0px 5px; border-radius: 5px; font-size: 15px;'>" +
+                        etiquetas[j] +
+                        "</div>";
+                }
+
+                var alu = i + 1;
+                $("#idBody").append("<tr class='sombrear' style='cursor:pointer;' onclick='return fn_ficha(" + usr + ", " + alu + ")'>"
+                    + "<td>" + myArray[i].split('_')[0] + "</td>"
+                    + "<td>" + myArray[i].split('_')[1] + "</td>"
+                    + "<td>" + myArray[i].split('_')[2] + "</td>"
+                    + "<td>" + myArray[i].split('_')[3] + "</td>"
+                    + "<td>" + myArray[i].split('_')[4] + "</td>"
+                    + "<td style='display:none'>" + myArray[i].split('_')[5] + "</td>"
+                    + "<td><div style='display: flex;'>" + html_etiquetas + "</div></td>"
+                    + "<td style='display:none;'>" + "<button onclick='return fn_ficha(" + usr + ", " + alu + ")' type='button' class='btn btn-info'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-search' viewBox='0 0 16 16'> <path d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/> <\/svg> <label for=''>Ficha</label><\/button>" + "</td>"
+                    + "</tr>");
+            }
+            return false;
+        }
+
+        //Contenido
+        function comparer(index) {
+            return function (a, b) {
+                var valA = getCellValue(a, index),
+                    valB = getCellValue(b, index)
+                return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.localeCompare(valB)
+            }
+        }
+
+        function getCellValue(row, index) {
+            return $(row).children('td').eq(index).html()
+        }
+
+        function setIcon(element, asc) {
+            $("th").each(function (index) {
+                $(this).removeClass("sorting");
+                $(this).removeClass("asc");
+                $(this).removeClass("desc");
+            });
+            element.addClass("sorting");
+            if (asc) element.addClass("asc");
+            else element.addClass("desc");
+        }
+
+        function fn_Buscar() {
+
+            var texto = $("#txtAlumno").val().toLowerCase();
+
+            $("#idBody").html("");
+
+            var myArray = ["Álvaro Sánchez Monteagudo_Valencia_España_+34657852546_smontegudo@gmail.com_ANGULAR|REACT|HTML&CSS_BB",
+                "Amparo Herra Climent_Sevilla_España_+34123456789_aherrera@gmail.com_FLUTTER|REACT_BB",
+                "Ana Gutierrez Lozano_Madrid_España_+34987541236_agutierrez@gmail.com_REACT|SYMFONY_BB",
+                "Antonio Miguel Lacunza_Barcelona_España_+34758426985_amiguel@gmail.com_ANGULAR|REACT_BB",
+                "Antonio Delgado Jimeno_Oviedo_España_+34542874517_adelgado@gmail.com_ANGULAR|HTML&CSS_BB",
+                "Belén Jerez Rivera_Jaen_España_+34968574215_bjerez@gmail.com_HTML&CSS_BB",
+                "Carla Barroso Soriano_Gijón_España_+34485926157_cbarroso@gmail.com_REACT_BB",
+                "Carlos Yuste Guerrero_Valencia_España_+34487596854_cyuste@gmail.com_ANGULAR_BB",
+                "Carmina Pérez Lopez_Sevilla_España_+34154785426_cperez@gmail.com_FLUTTER_BB",
+                "Iker Casillas_Madrid_España_+34154859263_ikasillas@gmail.com_FLUTTER|REACT_BB"]
+
+
+
+            for (var i = 0; i < myArray.length; i++) {
+
+                if (myArray[i].toLowerCase().indexOf(texto) > -1) {
+
+                    var etiquetas = myArray[i].split('_')[5].split('|')
+                    var html_etiquetas = '';
+                    for (var j = 0; j < etiquetas.length; j++) {
+                        html_etiquetas = html_etiquetas + "<div style='width: min-content; background: #32d4a4; margin: 0px 5px 0px 0px; color: white; padding: 0px 5px 0px 5px; border-radius: 5px; font-size: 15px;'>" +
+                            etiquetas[j] +
+                            "</div>";
+                    }
+
+                    var usr = $("#usr").text();
+                    var alu = i + 1;
+                    $("#idBody").append("<tr class='sombrear' style='cursor:pointer;' onclick='return fn_ficha(" + usr + ", " + alu + ")'>"
+                        + "<td>" + myArray[i].split('_')[0] + "</td>"
+                        + "<td>" + myArray[i].split('_')[1] + "</td>"
+                        + "<td>" + myArray[i].split('_')[2] + "</td>"
+                        + "<td>" + myArray[i].split('_')[3] + "</td>"
+                        + "<td>" + myArray[i].split('_')[4] + "</td>"
+                        + "<td style='display:none'>" + myArray[i].split('_')[5] + "</td>"
+                        + "<td><div style='display: flex;'>" + html_etiquetas + "</div></td>"
+                        + "<td style='display:none;'>" + "<button onclick='return fn_ficha(" + usr + ", " + alu + ")' type='button' class='btn btn-info'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-search' viewBox='0 0 16 16'> <path d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/> <\/svg> <label for=''>Ficha</label><\/button>" + "</td>"
+                        + "</tr>");
+                }
+            }
+
+            return false;
+        }
+
+        function pendiente() {
+            alert("Pendiente");
+            return false;
+        }
+
+        function fn_ficha(usr, alu) {
+            window.location.href = "ficha.html?usr=" + usr + "&alu=" + alu;
+            return false;
+        }
+
+        function fn_enlace(enlace) {
+            window.location.href = enlace + ".html?usr=1";
+        }
+
+        function fn_discusiones(enlace){
+            window.location.href = "discusiones.html?usr=1&curso=azure&modulo="+enlace;
+        }
+
+    </script>
+
+    <style>
+        body {
+            background-color: #f8f8f9;
+        }
+
+        .textLeft {
+            text-align: left;
+        }
+
+        .textRight {
+            text-align: right;
+        }
+
+
+
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        #header {
+            margin: auto;
+            width: 500px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        ul, ol {
+            list-style: none;
+            padding-left: 0;
+            margin-bottom: 0rem;
+        }
+
+        .nav > li {
+            float: left;
+        }
+
+        .nav li a {
+            /*background-color:#000;
+            color:#fff;*/
+            text-decoration: none;
+            padding: 10px 12px;
+            display: block;
+        }
+
+        .nav ul li a:hover {
+            background-color: #b3acac2f;
+        }
+
+        .nav li ul {
+            display: none;
+            position: absolute;
+            min-width: 140px;
+        }
+
+        .nav li:hover > ul {
+            display: block;
+        }
+
+        .nav li ul li {
+            position: relative;
+        }
+
+            .nav li ul li ul {
+                right: -140px;
+                top: 0px;
+            }
+
+        .mi_verde {
+            color: #32d4a4;
+        }
+
+        .mi_verde_bold {
+            color: #32d4a4;
+            font-weight: bold;
+        }
+
+        .mi_verde_back {
+            background: #32d4a4 !important;
+        }
+
+            .mi_verde_back:hover {
+                background: #15a076 !important;
+            }
+
+        ul li a :hover {
+            background-color: red;
+            ;
+        }
+
+
+
+        /*Contenido*/
+        table tr th {
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .sorting {
+            background-color: #D4D4D4;
+        }
+
+        .asc:after {
+            content: ' ↑';
+        }
+
+        .desc:after {
+            content: " ↓";
+        }
+
+        .sombrear:hover {
+            background-color: #cdebb1;
+        }
+
+        .css_tema2 {
+            margin: 5px;
+            border-radius: 10px;
+            height: 200px;
+            border: solid 1px rgb(201, 201, 201);
+            cursor: pointer;
+        }
+
+            .css_tema2:hover {
+                margin: 0px;
+                border: solid 3px #ffff0033;
+            }
+
+        .css_tema_general {
+            display: flex;
+            align-items: center;
+            /* justify-content: center; */
+            padding-left: 20px;
+            width: 100%;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            height: 90px;
+            background: -webkit-linear-gradient(left, #32d4a6, #32d4b6, #32d4ca);
+        }
+
+        .css_tema_errores {
+            display: flex;
+            align-items: center;
+            /* justify-content: center; */
+            padding-left: 20px;
+            width: 100%;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            height: 90px;
+            background: -webkit-linear-gradient(left, #e7505e, #dc4360, #ce3462);
+        }
+
+        .css_tema_proyectos {
+            display: flex;
+            align-items: center;
+            /* justify-content: center; */
+            padding-left: 20px;
+            width: 100%;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            height: 90px;
+            background: -webkit-linear-gradient(left, #2836bb, #2f4ac8, #365ed6);
+        }
+
+        .css_tema_comun {
+            display: flex;
+            align-items: center;
+            /* justify-content: center; */
+            padding-left: 20px;
+            width: 100%;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            height: 90px;
+            background: -webkit-linear-gradient(left, #162044, #040f36, #040f36);
+        }
+
+        .circulo_general {
+            height: 36px;
+            width: 36px;
+            border-radius: 18px;
+            background: #23ada5;
+            text-align: center;
+            padding-top: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .circulo_errores {
+            height: 36px;
+            width: 36px;
+            border-radius: 18px;
+            background: #b21e50;
+            text-align: center;
+            padding-top: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .circulo_proyectos {
+            height: 36px;
+            width: 36px;
+            border-radius: 18px;
+            background: #1b2382;
+            text-align: center;
+            padding-top: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .circulo_comun {
+            height: 36px;
+            width: 36px;
+            border-radius: 18px;
+            background: #0d4654;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #28edb2;
+        }
+
+        .tema_titulo {
+            margin-left: 10px;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .tema_descripcion {
+            font-size: 14px;
+            font-weight: bold;
+            padding: 12px;
+            height: 66px;
+        }
+
+        .tema_mensajes {
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            padding-left: 14px;
+        }
+
+        .menu_hover:hover {
+            background: #ffff0042;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+<body>
+    <div class='container-fluid' style="padding-top: 10px;">
+        <div class='row'>
+            <div class='col-4'>
+                <img src="https://campus.open-bootcamp.com/favicon.ico" width="40" alt=""><span style="font-size: 20px; font-weight: bold; padding-left: 5px;">OpenBootcamp</span>
+            </div>
+            <div class='col-8'>
+               
+            <div id="header" style="width: fit-content; float: right;">
+                <nav>
+                    <ul class="nav" style="background-color: white; border-radius: 20px 20px 20px 20px; width: 190px;">
+                        <li><div style="display: flex;
+                            align-items: center;
+                            text-align: center;
+                            justify-content: center;">
+                                <div style="
+                                display: flex;
+                                align-items: center;
+                                text-align: center;
+                                justify-content: center;
+                                color: white;
+                                background-color: black;
+                                border-radius: 20px 20px 20px 20px;
+                                height: 40px;
+                                width: 40px;">IM</div>
+                                <a id="a_UserName" href="#" style="height: 40px;
+                                display: flex;
+                                align-items: center;
+                                width: 120px;
+                                color: black;">UserName</a>
+                                <svg style="color: #a5a8b3;
+                                            font-weight: bold;" 
+                                    xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                                  </svg>
+                                </div>
+                            <ul style="background-color: white; margin-left: 15px;">
+                                <li>
+                                    <a style="color: black;" href="../login.html">Cerrar Sesión</a> 
+                                </li>
+                                <li>
+                                    <a style="color: black;" href="" onclick="pendiente();">Cambiar Contraseña</a> 
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            <div style="width: fit-content; float: right;">
+                <input id="txtbuscar"
+                       placeholder='Buscar'
+                       style="background: #e6e6ea; width: 140px; display: initial; margin-right: 20px; border-radius: 20px;" 
+                       type="text" 
+                       class="form-control" />
+            </div>
+            </div>
+        </div>
+
+        <!--Contenido-->
+        <div>
+            <div class="d-flex" style="padding-left:50px; padding-right:50px;">
+                <div>
+                    <div style="width: 200px; padding: 20px 0px;">
+                        <div class="menu_hover" onclick="fn_enlace('home');">
+                            <ul class="d-flex" style="padding: 10px; cursor: pointer;">
+                                <img src="../Images/iconos/icono_principal.png" style="width: 25px;">
+                                <li style="padding-left: 10px;">Página Principal</li>
+                            </ul>
+                        </div>
+                        <div class="menu_hover">
+                            <hr>
+                        </div>
+                        <div>
+                            <ul class="d-flex" style="padding: 10px; cursor: pointer;">
+                                <li style="font-weight: bold;">Cursos</li>
+                            </ul>
+                        </div>
+                        <div class="menu_hover" onclick="fn_enlace('angular');">
+                            <ul class="d-flex" style="padding: 10px; cursor: pointer;">
+                                <img src="../Images/iconos/icono_angular.png" style="width: 25px;">
+                                <li style="padding-left: 10px; text-decoration: none; color:black;">Angular</li>
+                            </ul>
+                        </div>
+                        <div class="menu_hover" onclick="fn_enlace('reactjs');">
+                            <ul class="d-flex" style="padding: 10px; cursor: pointer;">
+                                <img src="../Images/iconos/icono_reactjs.png" style="width: 25px;">
+                                <li style="padding-left: 10px; text-decoration: none; color:black;">React JS</li>
+                            </ul>
+                        </div>
+                        <div class="menu_hover" onclick="fn_enlace('spring');">
+                            <ul class="d-flex" style="padding: 10px; cursor: pointer;">
+                                <img src="../Images/iconos/icono_spring.png" style="width: 25px;">
+                                <li style="padding-left: 10px; text-decoration: none; color:black;">Spring</li>
+                            </ul>
+                        </div>
+                        <div class="menu_hover" onclick="fn_enlace('javascript');">
+                            <ul class="d-flex" style="padding: 10px; cursor: pointer;">
+                                <img src="../Images/iconos/icono_javascript.png" style="width: 25px;">
+                                <li style="padding-left: 10px; text-decoration: none; color:black;">Java Script</li>
+                            </ul>
+                        </div>
+                        <div class="menu_hover" onclick="fn_enlace('git');">
+                            <ul class="d-flex" style="padding: 10px; cursor: pointer;">
+                                <img src="../Images/iconos/icono_git.png" style="width: 25px;">
+                                <li style="padding-left: 10px; text-decoration: none; color:black;">Git</li>
+                            </ul>
+                        </div>
+                        <div class="menu_hover" onclick="fn_enlace('azure');">
+                            <ul class="d-flex" style="padding: 10px; cursor: pointer; border-radius: 10px; background-color: #e6e6ea; ">
+                                <img src="../Images/iconos/icono_azure.png" style="width: 25px;">
+                                <li style="padding-left: 10px; text-decoration: none; color:black;">Azure</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <div class="container" style="min-width:380px;">
+                            <br/>
+                            <div class="row" style="--bs-gutter-x: 0px;">
+                                <div class="col" style="height: 210px; border-radius: 10px; border: solid 1px rgb(201, 199, 199); background: -webkit-linear-gradient(left, #49a7de, #0089d6a1, #0089d6);">
+                                    
+                                    <div style="background-color: white; height: 139px; border-radius: 10px; margin-top: 70px; border-bottom: solid 1px rgb(201, 199, 199);
+                                    padding: 0 30px 30px 30px;">
+                                        <span style="font-size:22px; font-weight: bold; padding: 15px 0 0 70px;">Azure</span>
+                                          
+                                        <button style="float: right;
+                                        margin-top: 5px;
+                                        background: #d4f8ed;
+                                        color: #4ad9ae;
+                                        border: none;"  type="button" class="btn btn-primary">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-check-fill" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M15.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L12.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"></path>
+                                            <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
+                                            </svg>
+                                            <b>Siguiendo</b>
+                                          </button>
+                                        <hr>
+                                        <input id="txtAlumno"
+                                        placeholder='Buscar Temas'
+                                        style="background: #e6e6ea; width: 73%; display: initial;" type="text" class="form-control" />
+                                        <select style="background: #e6e6ea; width: 25%; display: initial; float: right;" class="form-control">
+                                            <option value="">Ordenar por</option>
+                                        </select>
+                                    </div>
+                                    <div style="width: 70px; height: 70px; background: rgb(214, 214, 214); padding: 3px; border-radius: 15px;
+                                    position: relative;
+                                    top: -170px;
+                                    left: 20px;">
+                                        <div style="width: 64px; height: 64px; background: white; padding: 8px; border-radius: 15px;">
+                                            <img src="../Images/iconos/icono_azure.png" width="50">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row"  style="--bs-gutter-x: 0rem; margin-left: -5px; margin-right: -5px;">
+                                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12" onclick="fn_discusiones('g')">
+                                    <div class="css_tema2">
+                                        <div class="css_tema_general">
+                                            <div class="circulo_general">
+                                                <i class="bi bi-chat-square-text"></i>
+                                            </div>
+                                            <div class="tema_titulo">General</div>
+                                        </div>
+                                        <div class="tema_descripcion">
+                                            <span>Dudas Generales</span>
+                                        </div>
+                                        <div class="tema_mensajes">
+                                            <i class="bi bi-chat-left-text" style="color: #000000cf;"></i>
+                                            <span style="font-size: 10px; font-weight: bold; color: #808080b5; padding-left: 5px;">12K preguntas</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12" onclick="fn_discusiones('e')">
+                                    <div class="css_tema2">
+                                        <div class="css_tema_errores">
+                                            <div class="circulo_errores">
+                                                <i class="bi bi-exclamation-triangle"></i>
+                                            </div>
+                                            <div class="tema_titulo">Errores</div>
+                                        </div>
+                                        <div class="tema_descripcion">
+                                            <span>Errores</span>
+                                        </div>
+                                        <div class="tema_mensajes">
+                                            <i class="bi bi-chat-left-text" style="color: #000000cf;"></i>
+                                            <span style="font-size: 10px; font-weight: bold; color: #808080b5; padding-left: 5px;">264 preguntas</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12" onclick="fn_discusiones('p')">
+                                    <div class="css_tema2">
+                                        <div class="css_tema_proyectos">
+                                            <div class="circulo_proyectos">
+                                                <i class="bi bi-box-seam"></i>
+                                            </div>
+                                            <div class="tema_titulo">Proyectos</div>
+                                        </div>
+                                        <div class="tema_descripcion">
+                                            <span>Proyectos</span>
+                                        </div>
+                                        <div class="tema_mensajes">
+                                            <i class="bi bi-chat-left-text" style="color: #000000cf;"></i>
+                                            <span style="font-size: 10px; font-weight: bold; color: #808080b5; padding-left: 5px;">234 preguntas</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12" onclick="fn_discusiones('1')">
+                                    <div class="css_tema2">
+                                        <div class="css_tema_comun">
+                                            <div class="circulo_comun">1</div>
+                                            <div class="tema_titulo">Módulo 1</div>
+                                        </div>
+                                        <div class="tema_descripcion">
+                                            <span>Aprendiendo a utilizar el framework</span>
+                                        </div>
+                                        <div class="tema_mensajes">
+                                            <i class="bi bi-chat-left-text" style="color: #000000cf;"></i>
+                                            <span style="font-size: 10px; font-weight: bold; color: #808080b5; padding-left: 5px;">456 preguntas</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12" onclick="fn_discusiones('2')">
+                                    <div class="css_tema2">
+                                        <div class="css_tema_comun">
+                                            <div class="circulo_comun">2</div>
+                                            <div class="tema_titulo">Módulo 2</div>
+                                        </div>
+                                        <div class="tema_descripcion">
+                                            <span>Utilizando funciones</span>
+                                        </div>
+                                        <div class="tema_mensajes">
+                                            <i class="bi bi-chat-left-text" style="color: #000000cf;"></i>
+                                            <span style="font-size: 10px; font-weight: bold; color: #808080b5; padding-left: 5px;">156 preguntas</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12" onclick="fn_discusiones('3')">
+                                    <div class="css_tema2">
+                                        <div class="css_tema_comun">
+                                            <div class="circulo_comun">3</div>
+                                            <div class="tema_titulo">Módulo 3</div>
+                                        </div>
+                                        <div class="tema_descripcion">
+                                            <span>Programando tu primer proyecto</span>
+                                        </div>
+                                        <div class="tema_mensajes">
+                                            <i class="bi bi-chat-left-text" style="color: #000000cf;"></i>
+                                            <span style="font-size: 10px; font-weight: bold; color: #808080b5; padding-left: 5px;">123 preguntas</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12" onclick="fn_discusiones('4')">
+                                    <div class="css_tema2">
+                                        <div class="css_tema_comun">
+                                            <div class="circulo_comun">4</div>
+                                            <div class="tema_titulo">Módulo 4</div>
+                                        </div>
+                                        <div class="tema_descripcion">
+                                            <span>Subida de archivos</span>
+                                        </div>
+                                        <div class="tema_mensajes">
+                                            <i class="bi bi-chat-left-text" style="color: #000000cf;"></i>
+                                            <span style="font-size: 10px; font-weight: bold; color: #808080b5; padding-left: 5px;">245 preguntas</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12" onclick="fn_discusiones('5')">
+                                    <div class="css_tema2">
+                                        <div class="css_tema_comun">
+                                            <div class="circulo_comun">5</div>
+                                            <div class="tema_titulo">Módulo 5</div>
+                                        </div>
+                                        <div class="tema_descripcion">
+                                            <span>Aplicando estilos</span>
+                                        </div>
+                                        <div class="tema_mensajes">
+                                            <i class="bi bi-chat-left-text" style="color: #000000cf;"></i>
+                                            <span style="font-size: 10px; font-weight: bold; color: #808080b5; padding-left: 5px;">234 preguntas</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12" onclick="fn_discusiones('6')">
+                                    <div class="css_tema2">
+                                        <div class="css_tema_comun">
+                                            <div class="circulo_comun">6</div>
+                                            <div class="tema_titulo">Módulo 6</div>
+                                        </div>
+                                        <div class="tema_descripcion">
+                                            <span>Estilos avanzados</span>
+                                        </div>
+                                        <div class="tema_mensajes">
+                                            <i class="bi bi-chat-left-text" style="color: #000000cf;"></i>
+                                            <span style="font-size: 10px; font-weight: bold; color: #808080b5; padding-left: 5px;">125 preguntas</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12" onclick="fn_discusiones('7')">
+                                    <div class="css_tema2">
+                                        <div class="css_tema_comun">
+                                            <div class="circulo_comun">7</div>
+                                            <div class="tema_titulo">Módulo 7</div>
+                                        </div>
+                                        <div class="tema_descripcion">
+                                            <span>Uso de bootstrap</span>
+                                        </div>
+                                        <div class="tema_mensajes">
+                                            <i class="bi bi-chat-left-text" style="color: #000000cf;"></i>
+                                            <span style="font-size: 10px; font-weight: bold; color: #808080b5; padding-left: 5px;">45 preguntas</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12" onclick="fn_discusiones('8')">
+                                    <div class="css_tema2">
+                                        <div class="css_tema_comun">
+                                            <div class="circulo_comun">8</div>
+                                            <div class="tema_titulo">Módulo 8</div>
+                                        </div>
+                                        <div class="tema_descripcion">
+                                            <span>Algo más</span>
+                                        </div>
+                                        <div class="tema_mensajes">
+                                            <i class="bi bi-chat-left-text" style="color: #000000cf;"></i>
+                                            <span style="font-size: 10px; font-weight: bold; color: #808080b5; padding-left: 5px;">31 preguntas</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="display: none;">
+            <input id="usr" type="text" value="">
+        </div>
+
+    </div>
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    
+    <!-- JQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#txtEmail").focus();
+            return false;
+        });
+
+        function fn_RegistrarUsuario(){
+            if($("#txtNombre").val().trim() == ""){
+                alert("Ingrese Nombre");
+                $("#txtNombre").focus();
+                return false;
+            }
+            if($("#txtAvatar").val().trim() == ""){
+                alert("Cargue Avatar");
+                $("#txtAvatar").focus();
+                return false;
+            }
+            if($("#txtEmail").val().trim() == ""){
+                alert("Ingrese Email");
+                $("#txtEmail").focus();
+                return false;
+            }
+            if($("#txtPassword").val().trim() == ""){
+                alert("Ingrese Contraseña");
+                $("#txtPassword").focus();
+                return false;
+            }
+            
+            alert("Registro Exitoso")
+            window.location.href = "login.html";
+            return false;
+        }
+
+        function pendiente(){
+            alert("Pendiente");
+            return false;
+        }
+
+        function login(){
+            window.location.href = "login.html";
+            return false;
+        }
+    </script>
+
+    <style>
+        /*Login*/
+        .central_vertial{
+            display: flex;
+            align-items: center;
+            padding: 20px 10px 20px 10px;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .margin_left_0{
+            margin-right: 0 !important;
+            padding-right: 0 !important;
+        }
+
+
+        /*Izquierda*/
+        .contenidoGrid{
+            display: grid;
+            grid-template-columns: repeat(auto-fill, 30px);
+        }
+
+        .miParrafo{
+            background: blue;;
+        }
+
+        .mi_label{
+            text-align: left;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .mi_verde{
+            color:#32d4a4;
+        }
+
+        .mi_verde_bold{
+            color:#32d4a4;
+            font-weight: bold;
+        }
+
+        .mi_verde_back{
+            background:#32d4a4 !important;
+        }
+
+        .mi_verde_back:hover{
+            background:#15a076 !important;
+        }
+
+        .mi_left{
+            text-align: left;
+        }
+
+        .mi_rem12{
+            font-size: 1.2rem;
+        }
+
+        .mi_rem11{
+            font-size: 1.1rem;
+        }
+
+        .mi_rem10{
+            font-size: 1.0rem;
+        }
+
+        .mi_rem9{
+            font-size: 0.9rem;
+        }
+
+        .mi_rem8{
+            font-size: 0.8rem;
+        }
+
+        .mi_p_sub{
+            margin: 0;
+            padding: 0;
+            font-size: 0.8rem;
+            text-align: left;
+            color: gray;;
+        }
+
+        .centrar_horizontal{
+            margin: 0 auto;
+        }
+
+        /*Derecha*/
+        .fondo{
+            background-image: url('Images/fondo.jpg');
+            min-height: 100vh;
+            background-size: cover;
+        }
+    </style>
+
+
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <div class="margin_left_0 container-fluid">
+            <div class="margin_left_0 row">
+                <div class="central_vertial col-lg-12">
+                    <div class="centrar_horizontal">
+                        <div>
+                            <h2 class="mi_left">
+                                <span>Foro OpenBootcamp</span>
+                                <span class="mi_verde"> | Registro</span>
+                            </h2>
+                        </div>
+                        <br>
+                        <div class="mi_label">
+                            <label class="label">Nombre</label>
+                        </div>
+                        <div>
+                            <input id="txtNombre" type="text" class="form-control" placeholder="Introduce tu nombre" aria-label="nombre" aria-describedby="basic-addon1">
+                            </input>
+                        </div>
+                        <br>
+                        <div class="mi_label">
+                            <label class="label">Avatar</label>
+                        </div>
+                        <div>
+                            <div class="mb-3">
+                                <input class="form-control" type="file" id="txtAvatar">
+                              </div>
+                        </div>
+                        <br>
+                        <div class="mi_label">
+                            <label class="label">Email</label>
+                        </div>
+                        <div>
+                            <input id="txtEmail" type="text" class="form-control" placeholder="Introduce tu correo" aria-label="email" aria-describedby="basic-addon1">
+                            </input>
+                        </div>
+                        <br>
+                        <div class="mi_label">
+                            <label class="label">Contraseña</label>
+                        </div>
+                        <div>
+                            <input id="txtPassword" type="password" class="form-control" placeholder="Introduce tu contraseña" aria-label="email" aria-describedby="basic-addon1">
+                            </input>
+                        </div>
+                        <br>
+                        <br>
+                        <button type="button" class="btn btn-success form-control mi_verde_back" onclick="fn_RegistrarUsuario();">Registrar Usuario</button>
+                        <div  class="mi_left col-7">
+                            <a class="mi_verde mi_rem8" href="" onclick="login();">Ir a Login</a> 
+                        </div>
+                        <br></br>
+                        <p class="mi_p_sub">Copyright &copy; 2021 Open Bootcamp SL, Imagina Group</p>
+                        <p class="mi_p_sub">Todos los derechos reservados</p>
+                        <p class="mi_p_sub">Política de Privacidad</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    
+    <!-- JQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</body>
+</html>
